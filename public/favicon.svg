@@ -1,110 +1,108 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
   <defs>
-    <!-- Background Gradient: Deep Emerald / Dark Teal -->
-    <radialGradient id="bgGrad" cx="50%" cy="40%" r="65%">
-      <stop offset="0%" stop-color="#0f3d2e" />
-      <stop offset="60%" stop-color="#09261c" />
-      <stop offset="100%" stop-color="#04140e" />
+    <!-- Background Gradient: Azul Meia-Noite -->
+    <radialGradient id="midnightBg" cx="50%" cy="38%" r="68%">
+      <stop offset="0%" stop-color="#1c2541" />
+      <stop offset="55%" stop-color="#0b132b" />
+      <stop offset="100%" stop-color="#050a17" />
     </radialGradient>
 
-    <!-- Leaf Green Gradient from Reference -->
-    <linearGradient id="leafGreen" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#86efac" />
-      <stop offset="40%" stop-color="#4ade80" />
-      <stop offset="100%" stop-color="#16a34a" />
+    <!-- Leaf Fill Gradient: Azul Claro / Sky Blue da paleta do site -->
+    <linearGradient id="skyBlueLeaf" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc" />
+      <stop offset="45%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
     </linearGradient>
 
-    <!-- 3D Shadow for Ribbons -->
-    <filter id="ribbonShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.6" />
+    <!-- 3D Shadow for White Ribbons -->
+    <filter id="ribbonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="1.8" flood-color="#000000" flood-opacity="0.65" />
     </filter>
   </defs>
 
-  <!-- Squircle Container -->
-  <rect width="120" height="120" rx="28" fill="url(#bgGrad)" />
-  <rect width="116" height="116" x="2" y="2" rx="26" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-opacity="0.25" />
+  <!-- Background Squircle Badge -->
+  <rect width="120" height="120" rx="28" fill="url(#midnightBg)" />
+  <rect width="116" height="116" x="2" y="2" rx="26" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.3" />
 
-  <!-- 5-Leaf Emblem Group (from Reference Image) -->
-  <g filter="url(#ribbonShadow)">
+  <!-- 5-Leaf Botanical Emblem in Site Colors -->
+  <g filter="url(#ribbonGlow)">
     <!-- 1. Central Top Leaf -->
     <path 
-      d="M 60 48 C 53 36 53 22 60 12 C 67 22 67 36 60 48 Z" 
-      fill="url(#leafGreen)" 
+      d="M 60 46 C 53 34 53 20 60 10 C 67 20 67 34 60 46 Z" 
+      fill="url(#skyBlueLeaf)" 
       stroke="#ffffff" 
-      stroke-width="2.5" 
+      stroke-width="2.6" 
       stroke-linejoin="round" 
     />
-    <line x1="60" y1="44" x2="60" y2="20" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.7" />
+    <line x1="60" y1="42" x2="60" y2="18" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-opacity="0.8" />
 
     <!-- 2. Upper Left Leaf -->
     <path 
-      d="M 57 50 C 46 40 38 28 34 22 C 45 22 55 35 57 50 Z" 
-      fill="url(#leafGreen)" 
+      d="M 57 48 C 45 38 36 26 32 20 C 43 20 54 33 57 48 Z" 
+      fill="url(#skyBlueLeaf)" 
       stroke="#ffffff" 
-      stroke-width="2.5" 
+      stroke-width="2.6" 
       stroke-linejoin="round" 
     />
-    <line x1="55" y1="46" x2="41" y2="28" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-opacity="0.7" />
+    <line x1="55" y1="44" x2="39" y2="26" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.8" />
 
     <!-- 3. Upper Right Leaf -->
     <path 
-      d="M 63 50 C 74 40 82 28 86 22 C 75 22 65 35 63 50 Z" 
-      fill="url(#leafGreen)" 
+      d="M 63 48 C 75 38 84 26 88 20 C 77 20 66 33 63 48 Z" 
+      fill="url(#skyBlueLeaf)" 
       stroke="#ffffff" 
-      stroke-width="2.5" 
+      stroke-width="2.6" 
       stroke-linejoin="round" 
     />
-    <line x1="65" y1="46" x2="79" y2="28" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-opacity="0.7" />
+    <line x1="65" y1="44" x2="81" y2="26" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.8" />
 
-    <!-- 4. Lower Left Leaf (Wing) -->
+    <!-- 4. Lower Left Wing Leaf -->
     <path 
-      d="M 54 58 C 40 53 28 48 20 46 C 29 60 45 64 54 58 Z" 
-      fill="url(#leafGreen)" 
+      d="M 53 57 C 39 52 26 47 17 45 C 27 60 44 64 53 57 Z" 
+      fill="url(#skyBlueLeaf)" 
       stroke="#ffffff" 
-      stroke-width="2.5" 
+      stroke-width="2.6" 
       stroke-linejoin="round" 
     />
-    <path d="M 50 58 C 40 55 32 52 26 49" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-opacity="0.7" fill="none" />
+    <path d="M 49 57 C 38 54 29 51 23 48" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.8" fill="none" />
 
-    <!-- 5. Lower Right Leaf (Wing) -->
+    <!-- 5. Lower Right Wing Leaf -->
     <path 
-      d="M 66 58 C 80 53 92 48 100 46 C 91 60 75 64 66 58 Z" 
-      fill="url(#leafGreen)" 
+      d="M 67 57 C 81 52 94 47 103 45 C 93 60 76 64 67 57 Z" 
+      fill="url(#skyBlueLeaf)" 
       stroke="#ffffff" 
-      stroke-width="2.5" 
+      stroke-width="2.6" 
       stroke-linejoin="round" 
     />
-    <path d="M 70 58 C 80 55 88 52 94 49" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-opacity="0.7" fill="none" />
+    <path d="M 71 57 C 82 54 91 51 97 48" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-opacity="0.8" fill="none" />
 
-    <!-- Central Interlocking Stem Structure -->
-    <!-- Left Stem Loop -->
+    <!-- Branching Stems Base -->
     <path 
-      d="M 44 63 C 50 67 56 68 58 72 L 58 75" 
+      d="M 42 62 C 49 66 55 68 57 72 L 57 76" 
       fill="none" 
       stroke="#ffffff" 
-      stroke-width="2.5" 
+      stroke-width="2.6" 
       stroke-linecap="round" 
     />
-    <!-- Right Stem Loop -->
     <path 
-      d="M 76 63 C 70 67 64 68 62 72 L 62 75" 
+      d="M 78 62 C 71 66 65 68 63 72 L 63 76" 
       fill="none" 
       stroke="#ffffff" 
-      stroke-width="2.5" 
+      stroke-width="2.6" 
       stroke-linecap="round" 
     />
   </g>
 
-  <!-- Brand Typography -->
+  <!-- New Modern Geometric Typography (Inter / Plus Jakarta Sans Style) -->
   <text 
     x="60" 
-    y="93" 
+    y="94" 
     text-anchor="middle" 
     fill="#ffffff" 
-    font-size="16" 
-    font-weight="800" 
-    letter-spacing="2.5" 
-    font-family="Outfit, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    font-size="16.5" 
+    font-weight="900" 
+    letter-spacing="3px" 
+    font-family="'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
   >
     VITTA
   </text>
@@ -113,11 +111,11 @@
     x="60" 
     y="108" 
     text-anchor="middle" 
-    fill="#4ade80" 
+    fill="#38bdf8" 
     font-size="9" 
     font-weight="700" 
-    letter-spacing="3.2" 
-    font-family="Outfit, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    letter-spacing="4px" 
+    font-family="'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
   >
     NUTRI
   </text>
