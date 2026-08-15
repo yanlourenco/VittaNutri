@@ -45,7 +45,10 @@ import {
   RefreshCw,
   Share2,
   CheckCircle2,
-  Stethoscope
+  Stethoscope,
+  AlertCircle,
+  Zap,
+  Flame
 } from 'lucide-react';
 
 export default function Dashboard({ session }) {
@@ -324,7 +327,7 @@ export default function Dashboard({ session }) {
                       value={dashboardStats?.totalPacientes || 0}
                       subtitle="Cadastrados no seu sistema"
                       icon={Users}
-                      color="green"
+                      color="midnight"
                       onClick={() => setActiveTab('pacientes')}
                     />
 
@@ -354,7 +357,7 @@ export default function Dashboard({ session }) {
                     <div className="dashboard-section-card">
                       <div className="section-card-header">
                         <div>
-                          <h3>⚠️ Pacientes sem Retorno (&gt; 30 dias)</h3>
+                          <h3><AlertCircle size={18} color="#d97706" /> Pacientes sem Retorno (&gt; 30 dias)</h3>
                           <p>Pacientes cuja última consulta foi há mais de 30 dias e sem retorno agendado</p>
                         </div>
                         {dashboardStats?.pacientesSemRetorno?.length > 0 && (
@@ -366,7 +369,7 @@ export default function Dashboard({ session }) {
 
                       {(!dashboardStats?.pacientesSemRetorno || dashboardStats.pacientesSemRetorno.length === 0) ? (
                         <div className="empty-state-mini">
-                          <CheckCircle2 size={36} color="#10b981" />
+                          <CheckCircle2 size={36} color="#0284c7" />
                           <p style={{ fontWeight: 600, color: 'var(--text-main)' }}>
                             Nenhum paciente sem retorno no momento
                           </p>
@@ -385,7 +388,7 @@ export default function Dashboard({ session }) {
                                 onClick={() => handleViewPatientDetails(fullPatient)}
                                 title="Clique para abrir o prontuário do paciente"
                               >
-                                <div className="retorno-avatar" style={{ backgroundColor: '#fff7ed', color: '#ea580c' }}>
+                                <div className="retorno-avatar" style={{ backgroundColor: '#fff7ed', color: '#c2410c' }}>
                                   {p.nome?.charAt(0).toUpperCase() || 'P'}
                                 </div>
                                 <div className="retorno-info">
@@ -426,7 +429,7 @@ export default function Dashboard({ session }) {
                     <div className="dashboard-section-card">
                       <div className="section-card-header">
                         <div>
-                          <h3>📅 Próximos Retornos Agendados</h3>
+                          <h3><Calendar size={18} color="var(--primary)" /> Próximos Retornos Agendados</h3>
                           <p>Consultas marcadas para os próximos dias</p>
                         </div>
                         <button className="btn-link" onClick={() => setActiveTab('consultas')}>
@@ -484,7 +487,7 @@ export default function Dashboard({ session }) {
                     <div className="dashboard-section-card">
                       <div className="section-card-header">
                         <div>
-                          <h3>🩺 Atendimentos Recentes</h3>
+                          <h3><Stethoscope size={18} color="var(--primary)" /> Atendimentos Recentes</h3>
                           <p>Últimas consultas e avaliações registradas</p>
                         </div>
                         <button className="btn-link" onClick={() => setActiveTab('consultas')}>
@@ -535,14 +538,14 @@ export default function Dashboard({ session }) {
                     <div className="dashboard-section-card quick-actions-panel">
                       <div className="section-card-header">
                         <div>
-                          <h3>⚡ Ações Rápidas</h3>
+                          <h3><Zap size={18} color="var(--primary)" /> Ações Rápidas</h3>
                           <p>Atalhos para as operações mais frequentes</p>
                         </div>
                       </div>
 
                       <div className="quick-buttons-grid">
                         <button className="quick-btn" onClick={handleOpenNewPatient}>
-                          <div className="quick-btn-icon" style={{ backgroundColor: '#ecfdf5', color: '#10b981' }}>
+                          <div className="quick-btn-icon" style={{ backgroundColor: '#e0f2fe', color: '#0284c7' }}>
                             <Users size={20} />
                           </div>
                           <div className="quick-btn-text">
@@ -552,7 +555,7 @@ export default function Dashboard({ session }) {
                         </button>
 
                         <button className="quick-btn" onClick={() => handleOpenNewConsulta()}>
-                          <div className="quick-btn-icon" style={{ backgroundColor: '#eff6ff', color: '#2563eb' }}>
+                          <div className="quick-btn-icon" style={{ backgroundColor: '#f1f5f9', color: '#0b132b' }}>
                             <Stethoscope size={20} />
                           </div>
                           <div className="quick-btn-text">
@@ -562,7 +565,7 @@ export default function Dashboard({ session }) {
                         </button>
 
                         <button className="quick-btn" onClick={() => handleOpenNewPlano()}>
-                          <div className="quick-btn-icon" style={{ backgroundColor: '#faf5ff', color: '#8b5cf6' }}>
+                          <div className="quick-btn-icon" style={{ backgroundColor: '#eef2ff', color: '#6366f1' }}>
                             <UtensilsCrossed size={20} />
                           </div>
                           <div className="quick-btn-text">
@@ -783,7 +786,7 @@ export default function Dashboard({ session }) {
                   <div className="dashboard-section-card" style={{ marginBottom: '2rem' }}>
                     <div className="section-card-header">
                       <div>
-                        <h3>Agenda de Próximos Retornos</h3>
+                        <h3><Calendar size={18} color="var(--primary)" /> Agenda de Próximos Retornos</h3>
                         <p>Controle de retornos para acompanhamento contínuo</p>
                       </div>
                     </div>
@@ -817,7 +820,7 @@ export default function Dashboard({ session }) {
                   <div className="dashboard-section-card">
                     <div className="section-card-header">
                       <div>
-                        <h3>Histórico Geral de Avaliações</h3>
+                        <h3><Stethoscope size={18} color="var(--primary)" /> Histórico Geral de Avaliações</h3>
                       </div>
                     </div>
 
@@ -935,9 +938,9 @@ export default function Dashboard({ session }) {
 
                             <div className="plano-hub-meta">
                               {cont.meta_calorica && (
-                                <span className="meta-pill">⚡ {cont.meta_calorica} kcal</span>
+                                <span className="meta-pill"><Flame size={12} /> {cont.meta_calorica} kcal</span>
                               )}
-                              <span className="meta-pill">🍽️ {refeicoes.length} refeições</span>
+                              <span className="meta-pill"><UtensilsCrossed size={12} /> {refeicoes.length} refeições</span>
                             </div>
 
                             <div className="plano-meals-preview">

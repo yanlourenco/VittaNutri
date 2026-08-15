@@ -13,7 +13,7 @@ export default function Header({ session, onNewPatient, onNewConsulta, onNewPlan
   return (
     <header className="app-header">
       <div className="header-greeting">
-        <h1>Olá, {session?.user?.name ? session.user.name.split(' ')[0] : 'Nutricionista'} 👋</h1>
+        <h1>Olá, {session?.user?.name ? session.user.name.split(' ')[0] : 'Nutricionista'}</h1>
         <div className="header-date">
           <Calendar size={15} />
           <span>{capitalize(todayFormatted)}</span>

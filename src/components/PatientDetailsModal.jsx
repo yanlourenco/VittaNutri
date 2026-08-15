@@ -16,7 +16,10 @@ import {
   Clock,
   TrendingDown,
   TrendingUp,
-  Activity
+  Activity,
+  Target,
+  Pill,
+  FileText
 } from 'lucide-react';
 import { getConsultas, getPlanosAlimentares, deleteConsulta, deletePlanoAlimentar } from '../lib/db';
 
@@ -205,7 +208,7 @@ export default function PatientDetailsModal({
               <div className="details-section-grid">
                 {/* Objetivos */}
                 <div className="details-card">
-                  <h5>🎯 Objetivos & Metas</h5>
+                  <h5><Target size={16} color="var(--primary)" /> Objetivos & Metas</h5>
                   <div className="tags-display">
                     {Array.isArray(patient.objetivos) && patient.objetivos.length > 0 ? (
                       patient.objetivos.map(obj => <span key={obj} className="tag-pill tag-primary">{obj}</span>)
@@ -220,7 +223,7 @@ export default function PatientDetailsModal({
 
                 {/* Rotina & Hábitos */}
                 <div className="details-card">
-                  <h5>⚡ Rotina & Estilo de Vida</h5>
+                  <h5><Activity size={16} color="var(--primary)" /> Rotina & Estilo de Vida</h5>
                   <ul className="details-list">
                     <li><strong>Nível de Atividade:</strong> {patient.nivel_atividade || 'Não informado'}</li>
                     <li>
@@ -235,7 +238,7 @@ export default function PatientDetailsModal({
 
                 {/* Saúde e Restrições */}
                 <div className="details-card">
-                  <h5>🩺 Saúde & Restrições Clínicas</h5>
+                  <h5><Stethoscope size={16} color="var(--primary)" /> Saúde & Restrições Clínicas</h5>
                   <div className="sub-detail-group">
                     <span className="sub-detail-label">Patologias:</span>
                     <div className="tags-display">
@@ -266,7 +269,7 @@ export default function PatientDetailsModal({
 
                 {/* Medicamentos & Observações */}
                 <div className="details-card">
-                  <h5>💊 Medicamentos & Suplementação</h5>
+                  <h5><Pill size={16} color="var(--primary)" /> Medicamentos & Suplementação</h5>
                   <ul className="details-list">
                     <li><strong>Medicamentos Contínuos:</strong> {patient.medicamentos || 'Nenhum'}</li>
                     <li><strong>Suplementação:</strong> {patient.suplementos || 'Nenhum'}</li>
@@ -434,7 +437,7 @@ export default function PatientDetailsModal({
 
               {planos.length === 0 ? (
                 <div className="empty-tab-state">
-                  <UtensilsCrossed size={40} className="empty-icon" />
+                  <FileText size={40} className="empty-icon" />
                   <p>Nenhum plano alimentar cadastrado para este paciente.</p>
                   <button 
                     className="btn-outline"
@@ -457,8 +460,8 @@ export default function PatientDetailsModal({
                           </span>
                         </div>
                         <div className="plan-item-details">
-                          <span>⚡ Meta: {conteudo.meta_calorica ? `${conteudo.meta_calorica} kcal` : 'Não especificada'}</span>
-                          <span>🍽️ {refeicoesCount} refeições estruturadas</span>
+                          <span>Meta Calórica: {conteudo.meta_calorica ? `${conteudo.meta_calorica} kcal` : 'Não especificada'}</span>
+                          <span>{refeicoesCount} refeições estruturadas</span>
                         </div>
                         <div className="plan-item-actions">
                           <button className="btn-outline btn-sm" onClick={() => onViewPlan(pl)}>

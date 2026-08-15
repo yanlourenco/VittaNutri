@@ -1,30 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Cores Principais - Tema Saúde & Nutrição de Alta Fidelidade */
-  --primary: #059669;
-  --primary-hover: #047857;
-  --primary-light: #ecfdf5;
-  --primary-glow: rgba(5, 150, 105, 0.15);
+  /* ========================================================
+     PALETA DE CORES: AZUL MEIA-NOITE, AZUL CLARO, CINZA E BRANCO
+     ======================================================== */
+  /* Azul Meia-Noite (Midnight Navy) */
+  --midnight: #0b132b;
+  --midnight-slate: #1c2541;
+  --midnight-light: #1e293b;
 
-  --secondary: #0284c7;
-  --secondary-light: #f0f9ff;
-  --success: #10b981;
+  /* Azul Primário & Azul Claro (Primary & Light Blue) */
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --primary-light: #f0f9ff;
+  --primary-glow: rgba(2, 132, 199, 0.16);
+  --sky-blue: #0ea5e9;
+  --ice-blue: #e0f2fe;
+
+  /* Cores de Alerta & Semânticas Refinadas */
+  --success: #059669;
   --success-light: #ecfdf5;
-  --warning: #f59e0b;
+  --warning: #d97706;
   --warning-light: #fffbeb;
-  --error: #ef4444;
-  --error-light: #fef2f2;
-  --purple: #8b5cf6;
-  --purple-light: #faf5ff;
+  --error: #e11d48;
+  --error-light: #fff1f2;
+  --purple: #6366f1;
+  --purple-light: #eef2ff;
 
-  /* Superfícies & Fundos */
+  /* Superfícies & Fundos (Cinza e Branco) */
   --bg-main: #f8fafc;
   --bg-sidebar: #ffffff;
   --card-bg: #ffffff;
   --modal-bg: #ffffff;
 
-  /* Tipografia & Bordas */
+  /* Tipografia & Bordas (Tons de Cinza Slate) */
   --text-main: #0f172a;
   --text-secondary: #334155;
   --text-muted: #64748b;
@@ -32,15 +41,15 @@
   --border-light: #f1f5f9;
 
   /* Sombras & Raios */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.07), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
 
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
-  --radius-xl: 20px;
+  --radius-xl: 18px;
 }
 
 * {
@@ -66,7 +75,7 @@ body {
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
-  background: radial-gradient(circle at top right, #e6fcf5 0%, #f8fafc 60%);
+  background: radial-gradient(circle at top right, #e0f2fe 0%, #f8fafc 60%);
 }
 
 .auth-card {
@@ -88,7 +97,7 @@ body {
 .auth-header h1 {
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--midnight);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,7 +152,7 @@ textarea.form-control {
 
 .btn-primary {
   width: 100%;
-  background-color: var(--primary);
+  background-color: var(--midnight);
   color: white;
   border: none;
   padding: 0.875rem;
@@ -156,8 +165,8 @@ textarea.form-control {
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-hover);
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  background-color: var(--midnight-slate);
+  box-shadow: 0 4px 12px rgba(11, 19, 43, 0.25);
 }
 
 .btn-primary:disabled {
@@ -185,7 +194,7 @@ textarea.form-control {
 .alert-error {
   background-color: var(--error-light);
   border-left: 4px solid var(--error);
-  color: #b91c1c;
+  color: #9f1239;
   padding: 0.75rem 1rem;
   border-radius: var(--radius-sm);
   margin-bottom: 1.5rem;
@@ -224,30 +233,30 @@ textarea.form-control {
 }
 
 .brand-icon {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #0b132b 0%, #0284c7 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+  box-shadow: 0 4px 10px rgba(11, 19, 43, 0.2);
 }
 
 .brand-text h2 {
   font-size: 1.15rem;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--midnight);
   letter-spacing: -0.5px;
 }
 
 .brand-text span {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
 
 .sidebar-section-title {
@@ -275,7 +284,7 @@ textarea.form-control {
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.925rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -284,8 +293,8 @@ textarea.form-control {
 }
 
 .sidebar-nav-item:hover {
-  background-color: var(--bg-main);
-  color: var(--primary);
+  background-color: #f1f5f9;
+  color: var(--midnight);
 }
 
 .sidebar-nav-item.active {
@@ -314,13 +323,13 @@ textarea.form-control {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #059669, #34d399);
+  background: linear-gradient(135deg, #0b132b, #0284c7);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   flex-shrink: 0;
 }
 
@@ -392,7 +401,7 @@ textarea.form-control {
 .header-greeting h1 {
   font-size: 1.35rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--midnight);
 }
 
 .header-date {
@@ -424,13 +433,13 @@ textarea.form-control {
 }
 
 .btn-action-primary {
-  background-color: var(--primary);
+  background-color: var(--midnight);
   color: white;
 }
 
 .btn-action-primary:hover {
-  background-color: var(--primary-hover);
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  background-color: var(--midnight-slate);
+  box-shadow: 0 4px 12px rgba(11, 19, 43, 0.2);
 }
 
 .btn-action-secondary {
@@ -476,8 +485,9 @@ textarea.form-control {
 }
 
 .stats-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
 }
 
 .stats-card-header {
@@ -494,23 +504,23 @@ textarea.form-control {
 }
 
 .stats-icon-wrapper {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.card-color-green .stats-icon-wrapper { background: #ecfdf5; color: #059669; }
-.card-color-blue .stats-icon-wrapper { background: #eff6ff; color: #2563eb; }
-.card-color-orange .stats-icon-wrapper { background: #fffbeb; color: #f59e0b; }
-.card-color-purple .stats-icon-wrapper { background: #faf5ff; color: #8b5cf6; }
+.card-color-blue .stats-icon-wrapper { background: #e0f2fe; color: #0284c7; }
+.card-color-midnight .stats-icon-wrapper { background: #e2e8f0; color: #0b132b; }
+.card-color-orange .stats-icon-wrapper { background: #fef3c7; color: #d97706; }
+.card-color-purple .stats-icon-wrapper { background: #eef2ff; color: #6366f1; }
 
 .stats-value {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--midnight);
   line-height: 1.1;
   margin-bottom: 0.35rem;
 }
@@ -544,10 +554,19 @@ textarea.form-control {
   margin-bottom: 1.25rem;
 }
 
+.section-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .section-card-header h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--midnight);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .section-card-header p {
@@ -584,7 +603,7 @@ textarea.form-control {
   align-items: center;
   justify-content: space-between;
   padding: 0.85rem 1rem;
-  background-color: #fffaf5;
+  background-color: #fffdfa;
   border: 1px solid #fed7aa;
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
@@ -596,9 +615,9 @@ textarea.form-control {
 
 .sem-retorno-item.clickable:hover {
   background-color: #fff7ed;
-  border-color: #fb923c;
+  border-color: #f97316;
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.12);
+  box-shadow: var(--shadow-sm);
 }
 
 .clickable-patient-name {
@@ -607,7 +626,7 @@ textarea.form-control {
 }
 
 .sem-retorno-item.clickable:hover .clickable-patient-name {
-  color: #ea580c;
+  color: #c2410c;
   text-decoration: underline;
 }
 
@@ -638,8 +657,8 @@ textarea.form-control {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #ecfdf5;
-  color: #059669;
+  background: #e0f2fe;
+  color: #0284c7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -673,8 +692,9 @@ textarea.form-control {
   width: 32px;
   height: 32px;
   border-radius: var(--radius-sm);
-  background-color: #ecfdf5;
+  background-color: #f0fdf4;
   color: #059669;
+  border: 1px solid #bbf7d0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -685,6 +705,7 @@ textarea.form-control {
 .btn-icon-whatsapp:hover {
   background-color: #059669;
   color: white;
+  border-color: #059669;
 }
 
 /* Recent Consultas List */
@@ -707,19 +728,20 @@ textarea.form-control {
 .consulta-date-box {
   width: 44px;
   height: 44px;
-  background: #ecfdf5;
+  background: #f1f5f9;
   border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-right: 0.85rem;
+  border: 1px solid #e2e8f0;
 }
 
 .c-day {
   font-size: 1rem;
   font-weight: 800;
-  color: var(--primary);
+  color: var(--midnight);
   line-height: 1;
 }
 
@@ -809,7 +831,7 @@ textarea.form-control {
 .page-header-row h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--midnight);
 }
 
 .page-header-row p {
@@ -880,15 +902,15 @@ textarea.form-control {
 }
 
 .status-pill-btn.active {
-  background-color: var(--text-main);
+  background-color: var(--midnight);
   color: white;
-  border-color: var(--text-main);
+  border-color: var(--midnight);
 }
 
 .status-pill-btn.warning.active {
-  background-color: #ea580c;
+  background-color: #c2410c;
   color: white;
-  border-color: #ea580c;
+  border-color: #c2410c;
 }
 
 .status-pill-btn.success.active {
@@ -977,7 +999,7 @@ textarea.form-control {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #ecfdf5;
+  background: #e0f2fe;
   color: var(--primary);
   display: flex;
   align-items: center;
@@ -1024,8 +1046,8 @@ textarea.form-control {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  background-color: #ecfdf5;
-  color: #047857;
+  background-color: #f0fdf4;
+  color: #15803d;
   padding: 0.25rem 0.6rem;
   border-radius: 20px;
   font-size: 0.78rem;
@@ -1060,14 +1082,15 @@ textarea.form-control {
 }
 
 .btn-table-action.btn-view {
-  background-color: #ecfdf5;
-  border-color: #a7f3d0;
+  background-color: #f0f9ff;
+  border-color: #bae6fd;
   color: var(--primary);
 }
 
 .btn-table-action.btn-view:hover {
   background-color: var(--primary);
   color: white;
+  border-color: var(--primary);
 }
 
 .btn-table-action.btn-edit:hover {
@@ -1077,7 +1100,7 @@ textarea.form-control {
 
 .btn-table-action.btn-delete:hover {
   background-color: var(--error-light);
-  border-color: #fca5a5;
+  border-color: #fecdd3;
   color: var(--error);
 }
 
@@ -1090,7 +1113,7 @@ textarea.form-control {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(15, 23, 42, 0.55);
+  background-color: rgba(11, 19, 43, 0.6);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -1125,7 +1148,7 @@ textarea.form-control {
 .modal-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--midnight);
 }
 
 .modal-subtitle {
@@ -1170,7 +1193,7 @@ textarea.form-control {
 }
 
 .btn-primary-action {
-  background-color: var(--primary);
+  background-color: var(--midnight);
   color: white;
   border: none;
   padding: 0.65rem 1.25rem;
@@ -1185,8 +1208,8 @@ textarea.form-control {
 }
 
 .btn-primary-action:hover {
-  background-color: var(--primary-hover);
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+  background-color: var(--midnight-slate);
+  box-shadow: 0 4px 12px rgba(11, 19, 43, 0.2);
 }
 
 .btn-primary-action.btn-sm {
@@ -1207,8 +1230,8 @@ textarea.form-control {
 }
 
 .btn-danger-action:hover {
-  background-color: #dc2626;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+  background-color: #be123c;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
 }
 
 .btn-outline {
@@ -1289,7 +1312,7 @@ textarea.form-control {
 
 .wizard-bar {
   height: 100%;
-  background: linear-gradient(90deg, #059669, #10b981);
+  background: linear-gradient(90deg, #0b132b, #0284c7);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -1388,9 +1411,9 @@ textarea.form-control {
 }
 
 .tag-chip.active {
-  background-color: #ecfdf5;
-  border-color: #10b981;
-  color: #059669;
+  background-color: #f0f9ff;
+  border-color: #38bdf8;
+  color: #0369a1;
   font-weight: 600;
 }
 
@@ -1402,9 +1425,9 @@ textarea.form-control {
 }
 
 .tag-chip.active-danger {
-  background-color: #fef2f2;
-  border-color: #ef4444;
-  color: #b91c1c;
+  background-color: #fff1f2;
+  border-color: #fb7185;
+  color: #9f1239;
   font-weight: 600;
 }
 
@@ -1416,10 +1439,10 @@ textarea.form-control {
   font-weight: 600;
 }
 
-.tag-primary { background: #ecfdf5; color: #059669; }
+.tag-primary { background: #f0f9ff; color: #0369a1; }
 .tag-warning { background: #fffbeb; color: #b45309; }
-.tag-info { background: #f0f9ff; color: #0369a1; }
-.tag-danger { background: #fef2f2; color: #b91c1c; }
+.tag-info { background: #e0f2fe; color: #0284c7; }
+.tag-danger { background: #fff1f2; color: #9f1239; }
 
 .custom-checkbox-label {
   display: flex;
@@ -1431,8 +1454,8 @@ textarea.form-control {
 }
 
 .imc-calc-box {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
   border-radius: var(--radius-md);
   padding: 0.85rem 1rem;
   margin-top: 1rem;
@@ -1443,13 +1466,13 @@ textarea.form-control {
 
 .imc-badge {
   font-weight: 700;
-  color: #15803d;
+  color: #0369a1;
   font-size: 0.95rem;
 }
 
 .imc-classification {
   font-size: 0.85rem;
-  color: #166534;
+  color: #0c4a6e;
 }
 
 /* ========================================================
@@ -1611,7 +1634,7 @@ textarea.form-control {
 
 .chart-pill-bar {
   width: 14px;
-  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
   border-radius: 6px;
   transition: height 0.4s ease;
 }
@@ -1625,7 +1648,7 @@ textarea.form-control {
    PATIENT DETAILS MODAL (PRONTUÁRIO)
    ======================================================== */
 .patient-hero-banner {
-  background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+  background: linear-gradient(135deg, #0b132b 0%, #1c2541 100%);
   color: white;
   border-radius: var(--radius-lg);
   padding: 1.5rem;
@@ -1639,7 +1662,7 @@ textarea.form-control {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #059669, #34d399);
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1665,7 +1688,7 @@ textarea.form-control {
 }
 
 .hero-badge {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-size: 0.72rem;
@@ -1677,7 +1700,7 @@ textarea.form-control {
   flex-wrap: wrap;
   gap: 1rem;
   font-size: 0.825rem;
-  color: #a7f3d0;
+  color: #bae6fd;
 }
 
 .hero-contacts span {
@@ -1700,7 +1723,7 @@ textarea.form-control {
 
 .metric-lbl {
   font-size: 0.7rem;
-  color: #a7f3d0;
+  color: #bae6fd;
   text-transform: uppercase;
 }
 
@@ -1710,8 +1733,8 @@ textarea.form-control {
   color: white;
 }
 
-.metric-good .metric-val { color: #4ade80; }
-.metric-up .metric-val { color: #f87171; }
+.metric-good .metric-val { color: #38bdf8; }
+.metric-up .metric-val { color: #fda4af; }
 
 .details-tab-bar {
   display: flex;
@@ -1756,8 +1779,11 @@ textarea.form-control {
 .details-card h5 {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--midnight);
   margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .details-list {
@@ -1849,12 +1875,12 @@ textarea.form-control {
 .timeline-date {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--midnight);
 }
 
 .badge-pill.latest {
-  background: #ecfdf5;
-  color: #059669;
+  background: #f0f9ff;
+  color: #0284c7;
   padding: 0.2rem 0.5rem;
   border-radius: 20px;
   font-size: 0.72rem;
@@ -1886,7 +1912,7 @@ textarea.form-control {
 .meas-val {
   font-size: 1rem;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--midnight);
 }
 
 .timeline-obs {
@@ -1932,7 +1958,7 @@ textarea.form-control {
 .plan-item-header h6 {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--midnight);
 }
 
 .plan-date {
@@ -2003,14 +2029,15 @@ textarea.form-control {
 }
 
 .btn-toolbar.whatsapp {
-  background-color: #ecfdf5;
-  border-color: #a7f3d0;
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
   color: #059669;
 }
 
 .btn-toolbar.whatsapp:hover {
   background-color: #059669;
   color: white;
+  border-color: #059669;
 }
 
 .meals-builder-list {
@@ -2056,7 +2083,7 @@ textarea.form-control {
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   background: transparent;
-  color: var(--text-main);
+  color: var(--midnight);
 }
 
 .meal-input-title:focus {
@@ -2165,6 +2192,7 @@ textarea.form-control {
 .plano-hub-card h4 {
   font-size: 1.1rem;
   font-weight: 700;
+  color: var(--midnight);
   margin-bottom: 0.65rem;
 }
 
@@ -2181,6 +2209,9 @@ textarea.form-control {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .plano-meals-preview {
@@ -2240,6 +2271,7 @@ textarea.form-control {
 .tab-header-title h3 {
   font-size: 1.5rem;
   font-weight: 700;
+  color: var(--midnight);
 }
 
 .tab-header-title p {
@@ -2281,6 +2313,7 @@ textarea.form-control {
 .calc-card-header h4 {
   font-size: 1.05rem;
   font-weight: 700;
+  color: var(--midnight);
 }
 
 .calc-inputs-row {
@@ -2358,6 +2391,7 @@ textarea.form-control {
 .empty-state-card h3 {
   font-size: 1.2rem;
   font-weight: 700;
+  color: var(--midnight);
   margin-bottom: 0.35rem;
 }
 
@@ -2386,9 +2420,9 @@ textarea.form-control {
   min-width: 300px;
 }
 
-.toast-success { border-left: 4px solid var(--success); }
+.toast-success { border-left: 4px solid var(--primary); }
 .toast-error { border-left: 4px solid var(--error); }
-.toast-info { border-left: 4px solid var(--primary); }
+.toast-info { border-left: 4px solid var(--midnight); }
 
 .toast-content {
   display: flex;
@@ -2398,9 +2432,9 @@ textarea.form-control {
   font-weight: 500;
 }
 
-.toast-icon.success { color: var(--success); }
+.toast-icon.success { color: var(--primary); }
 .toast-icon.error { color: var(--error); }
-.toast-icon.info { color: var(--primary); }
+.toast-icon.info { color: var(--midnight); }
 
 .toast-close {
   background: transparent;
@@ -2487,13 +2521,13 @@ textarea.form-control {
     display: flex !important;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #059669;
+    border-bottom: 2px solid #0b132b;
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
   }
   .print-brand h3 {
     font-size: 1.2rem;
-    color: #059669;
+    color: #0b132b;
   }
   .print-brand p {
     font-size: 0.85rem;

@@ -70,31 +70,31 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
 
   const formatTextForShare = () => {
     const nome = selectedPatient?.nome || 'Paciente';
-    let text = `🌱 *VITTA NUTRI — PLANO ALIMENTAR*\n`;
-    text += `👤 *Paciente:* ${nome}\n`;
-    text += `📋 *Plano:* ${formData.titulo}\n`;
-    if (formData.meta_calorica) text += `⚡ *Meta Estimada:* ${formData.meta_calorica} kcal\n`;
-    text += `\n═══════════════════════\n\n`;
+    let text = `*VITTA NUTRI — PRESCRIÇÃO NUTRICIONAL*\n`;
+    text += `*Paciente:* ${nome}\n`;
+    text += `*Plano:* ${formData.titulo}\n`;
+    if (formData.meta_calorica) text += `*Meta Calórica Estimada:* ${formData.meta_calorica} kcal\n`;
+    text += `\n───────────────────────\n\n`;
 
     formData.refeicoes.forEach(r => {
-      text += `🕒 *${r.nome.toUpperCase()} (${r.horario})*\n`;
+      text += `*${r.nome.toUpperCase()} (${r.horario})*\n`;
       if (r.alimentos) {
         r.alimentos.split('\n').forEach(item => {
-          if (item.trim()) text += `  • ${item.trim()}\n`;
+          if (item.trim()) text += `• ${item.trim()}\n`;
         });
       }
       if (r.recomendacoes) {
-        text += `  💡 _Obs:_ ${r.recomendacoes}\n`;
+        text += `_Orientação:_ ${r.recomendacoes}\n`;
       }
       text += `\n`;
     });
 
     if (formData.observacoes_gerais) {
-      text += `═══════════════════════\n`;
-      text += `📌 *ORIENTAÇÕES GERAIS*\n${formData.observacoes_gerais}\n`;
+      text += `───────────────────────\n`;
+      text += `*ORIENTAÇÕES GERAIS*\n${formData.observacoes_gerais}\n`;
     }
 
-    text += `\nQualquer dúvida, estou à disposição! 🍏✨`;
+    text += `\nEm caso de dúvidas, permaneço à disposição.`;
     return text;
   };
 
@@ -183,7 +183,7 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
 
           <div className="toolbar-export-buttons">
             <button type="button" className="btn-toolbar" onClick={handleCopyText} title="Copiar texto formatado">
-              {copied ? <Check size={16} color="#10b981" /> : <Copy size={16} />}
+              {copied ? <Check size={16} color="#0284c7" /> : <Copy size={16} />}
               <span>{copied ? 'Copiado!' : 'Copiar Texto'}</span>
             </button>
             <button type="button" className="btn-toolbar whatsapp" onClick={handleSendWhatsApp} title="Enviar via WhatsApp">
