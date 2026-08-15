@@ -4,9 +4,9 @@ import {
   Stethoscope, 
   UtensilsCrossed, 
   Calculator, 
-  LogOut,
-  Activity
+  LogOut
 } from 'lucide-react';
+import VittaLogo from './VittaLogo';
 
 export default function Sidebar({ activeTab, setActiveTab, session, onLogout }) {
   const menuItems = [
@@ -21,7 +21,7 @@ export default function Sidebar({ activeTab, setActiveTab, session, onLogout }) 
     <aside className="app-sidebar">
       <div className="sidebar-brand">
         <div className="brand-icon">
-          <Activity size={24} />
+          <VittaLogo size={24} color="#38bdf8" />
         </div>
         <div className="brand-text">
           <h2>Vitta Nutri</h2>

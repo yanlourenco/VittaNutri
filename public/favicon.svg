@@ -1,51 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
   <defs>
     <!-- Background Gradient: Midnight Blue -->
-    <linearGradient id="vittaBg" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0b132b" />
-      <stop offset="50%" stop-color="#1c2541" />
-      <stop offset="100%" stop-color="#0a1128" />
+      <stop offset="60%" stop-color="#1c2541" />
+      <stop offset="100%" stop-color="#070d1e" />
     </linearGradient>
 
-    <!-- Leaf / Vitality Gradient: Sky Blue to Emerald Cyan -->
-    <linearGradient id="vitalityGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#0284c7" />
-      <stop offset="60%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#67e8f9" />
+    <!-- Stroke Gradient: Wellness Teal to Sky Blue -->
+    <linearGradient id="leafGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00b4d8" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#38bdf8" />
     </linearGradient>
 
-    <!-- Secondary Accent Gradient -->
-    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-      <stop offset="100%" stop-color="#bae6fd" stop-opacity="0.7" />
-    </linearGradient>
-
-    <!-- Soft Glow Filter -->
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0284c7" flood-opacity="0.4" />
+    <!-- Subtle Glow Filter -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#00b4d8" flood-opacity="0.5" />
     </filter>
   </defs>
 
-  <!-- Background Squircle Badge -->
-  <rect width="64" height="64" rx="16" fill="url(#vittaBg)" />
-  <rect width="62" height="62" x="1" y="1" rx="15" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.25" />
+  <!-- Squircle Container -->
+  <rect width="100" height="100" rx="24" fill="url(#bgGrad)" />
+  <rect width="96" height="96" x="2" y="2" rx="22" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.3" />
 
-  <!-- Stylized Vitta "V" & Nutritional Vitality Leaf -->
-  <g filter="url(#glow)">
-    <!-- Right Leaf Curve of the V -->
-    <path 
-      d="M32 50 C36 42 48 32 50 18 C38 18 30 28 32 50 Z" 
-      fill="url(#vitalityGrad)" 
-    />
-    
-    <!-- Left Dynamic Stroke of the V -->
-    <path 
-      d="M14 20 C18 20 28 34 32 50 C29 38 23 26 14 20 Z" 
-      fill="url(#accentGrad)" 
-    />
+  <!-- Wellness 3-Leaf Botanical Logo from Reference -->
+  <g 
+    filter="url(#softGlow)" 
+    fill="none" 
+    stroke="url(#leafGrad)" 
+    stroke-width="4.5" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  >
+    <!-- Central Vertical Stem -->
+    <line x1="50" y1="58" x2="50" y2="84" stroke-width="5" />
 
-    <!-- Central Vitality Pulse Node / Spark -->
-    <circle cx="32" cy="22" r="3.5" fill="#38bdf8" />
-    <circle cx="32" cy="22" r="1.5" fill="#ffffff" />
+    <!-- Top Vertical Leaf -->
+    <path d="M 50 58 C 36 44 36 26 50 14 C 64 26 64 44 50 58 Z" />
+    <!-- Top Leaf Vein -->
+    <line x1="50" y1="56" x2="50" y2="25" stroke-width="3.5" />
+
+    <!-- Left Tilted Leaf -->
+    <path d="M 50 58 C 34 50 20 42 15 34 C 18 52 32 68 50 58 Z" />
+    <!-- Left Leaf Vein -->
+    <path d="M 50 58 C 38 52 28 44 21 38" stroke-width="3.5" />
+
+    <!-- Right Tilted Leaf -->
+    <path d="M 50 58 C 66 50 80 42 85 34 C 82 52 68 68 50 58 Z" />
+    <!-- Right Leaf Vein -->
+    <path d="M 50 58 C 62 52 72 44 79 38" stroke-width="3.5" />
   </g>
 </svg>

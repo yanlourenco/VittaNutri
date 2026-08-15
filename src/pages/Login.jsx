@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signIn } from '../lib/auth';
-import { Activity } from 'lucide-react';
+import VittaLogo from '../components/VittaLogo';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -38,8 +38,8 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>
-            <Activity color="var(--primary)" size={28} />
+          <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}>
+            <VittaLogo size={32} color="var(--primary)" />
             Vitta Nutri
           </h1>
           <p>Acesse o painel do nutricionista</p>
