@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-    baseURL: "https://ep-wild-flower-acin8qgg.neonauth.sa-east-1.aws.neon.tech/neondb/auth"
+  baseURL: import.meta.env.VITE_NEON_AUTH_URL || "https://ep-wild-flower-acin8qgg.neonauth.sa-east-1.aws.neon.tech/neondb/auth"
 });
 
 export const { signIn, signUp, signOut, useSession } = authClient;

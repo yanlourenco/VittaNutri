@@ -42,6 +42,7 @@ export default function Register() {
         navigate('/');
       }
     } catch (err) {
+      console.error('Register error:', err);
       setError('Ocorreu um erro inesperado. Tente novamente.');
     } finally {
       setLoading(false);

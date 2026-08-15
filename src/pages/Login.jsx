@@ -27,6 +27,7 @@ export default function Login() {
         navigate('/');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('Ocorreu um erro inesperado. Tente novamente.');
     } finally {
       setLoading(false);
