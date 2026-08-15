@@ -361,6 +361,49 @@ export async function createConsulta(data) {
   return newItem;
 }
 
+export async function updateConsulta(id, data) {
+  if (!id) throw new Error('ID da consulta é obrigatório.');
+
+  const cleanData = {
+    data_consulta: data.data_consulta,
+    peso: data.peso ? parseFloat(data.peso) : null,
+    cintura: data.cintura ? parseFloat(data.cintura) : null,
+    quadril: data.quadril ? parseFloat(data.quadril) : null,
+    percentual_gordura: data.percentual_gordura ? parseFloat(data.percentual_gordura) : null,
+    observacoes: data.observacoes || null,
+    proximo_retorno: data.proximo_retorno || null
+  };
+
+  if (sql) {
+    try {
+      const updated = await sql`
+        UPDATE public.consultas SET
+          data_consulta = ${cleanData.data_consulta},
+          peso = ${cleanData.peso},
+          cintura = ${cleanData.cintura},
+          quadril = ${cleanData.quadril},
+          percentual_gordura = ${cleanData.percentual_gordura},
+          observacoes = ${cleanData.observacoes},
+          proximo_retorno = ${cleanData.proximo_retorno}
+        WHERE id = ${id}
+        RETURNING *
+      `;
+      return updated[0];
+    } catch (err) {
+      console.warn('Database error on updateConsulta, fallback:', err);
+    }
+  }
+
+  const list = getLS(LS_KEYS.CONSULTAS);
+  const index = list.findIndex(c => c.id === id);
+  if (index !== -1) {
+    list[index] = { ...list[index], ...cleanData };
+    setLS(LS_KEYS.CONSULTAS, list);
+    return list[index];
+  }
+  throw new Error('Consulta não encontrada.');
+}
+
 export async function deleteConsulta(id) {
   if (!id) return false;
 
@@ -463,6 +506,35 @@ export async function createPlanoAlimentar(data) {
   list.unshift(newItem);
   setLS(LS_KEYS.PLANOS, list);
   return newItem;
+}
+
+export async function updatePlanoAlimentar(id, data) {
+  if (!id) throw new Error('ID do plano é obrigatório.');
+
+  const cleanConteudo = typeof data.conteudo === 'string' ? JSON.parse(data.conteudo) : data.conteudo;
+
+  if (sql) {
+    try {
+      const updated = await sql`
+        UPDATE public.planos_alimentares SET
+          conteudo = ${JSON.stringify(cleanConteudo)}
+        WHERE id = ${id}
+        RETURNING *
+      `;
+      return updated[0];
+    } catch (err) {
+      console.warn('Database error on updatePlanoAlimentar, fallback:', err);
+    }
+  }
+
+  const list = getLS(LS_KEYS.PLANOS);
+  const index = list.findIndex(p => p.id === id);
+  if (index !== -1) {
+    list[index] = { ...list[index], conteudo: cleanConteudo };
+    setLS(LS_KEYS.PLANOS, list);
+    return list[index];
+  }
+  throw new Error('Plano alimentar não encontrado.');
 }
 
 export async function deletePlanoAlimentar(id) {

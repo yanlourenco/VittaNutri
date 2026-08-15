@@ -9,8 +9,11 @@ import {
   updatePaciente,
   deletePaciente,
   createConsulta,
+  updateConsulta,
+  deleteConsulta,
   getAllPlanosAlimentares,
   createPlanoAlimentar,
+  updatePlanoAlimentar,
   deletePlanoAlimentar
 } from '../lib/db';
 
@@ -79,6 +82,7 @@ export default function Dashboard({ session }) {
   const [selectedPatientForDetails, setSelectedPatientForDetails] = useState(null);
 
   const [isConsultaOpen, setIsConsultaOpen] = useState(false);
+  const [consultaToEdit, setConsultaToEdit] = useState(null);
   const [preSelectedPatientId, setPreSelectedPatientId] = useState(null);
 
   const [isMealPlanOpen, setIsMealPlanOpen] = useState(false);
@@ -207,22 +211,50 @@ export default function Dashboard({ session }) {
 
   // CONSULTA ACTIONS
   const handleOpenNewConsulta = (patientId = null) => {
+    setConsultaToEdit(null);
     setPreSelectedPatientId(patientId);
     setIsConsultaOpen(true);
   };
 
+  const handleOpenEditConsulta = (c) => {
+    setConsultaToEdit(c);
+    setPreSelectedPatientId(c.paciente_id);
+    setIsConsultaOpen(true);
+  };
+
   const handleSaveConsulta = async (consultaData) => {
-    await createConsulta(consultaData);
-    showToast('Consulta e medidas registradas com sucesso!');
+    if (consultaToEdit?.id) {
+      await updateConsulta(consultaToEdit.id, consultaData);
+      showToast('Consulta e medidas atualizadas com sucesso!');
+    } else {
+      await createConsulta(consultaData);
+      showToast('Consulta e medidas registradas com sucesso!');
+    }
     if (nutricionista?.id) {
       await loadAllData(nutricionista.id);
     }
   };
 
+  const handleDeleteConsulta = (id) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Excluir Consulta',
+      message: 'Tem certeza que deseja excluir esta avaliação antropométrica? Esta ação não pode ser desfeita.',
+      onConfirm: async () => {
+        await deleteConsulta(id);
+        setConfirmModal(prev => ({ ...prev, isOpen: false }));
+        showToast('Consulta removida com sucesso!');
+        if (nutricionista?.id) {
+          await loadAllData(nutricionista.id);
+        }
+      }
+    });
+  };
+
   // PLANO ACTIONS
   const handleOpenNewPlano = (patientId = null) => {
-    setPreSelectedPatientId(patientId);
     setPlanToView(null);
+    setPreSelectedPatientId(patientId);
     setIsMealPlanOpen(true);
   };
 
@@ -233,8 +265,13 @@ export default function Dashboard({ session }) {
   };
 
   const handleSavePlano = async (planoData) => {
-    await createPlanoAlimentar(planoData);
-    showToast('Plano alimentar salvo com sucesso!');
+    if (planoData.id) {
+      await updatePlanoAlimentar(planoData.id, planoData);
+      showToast('Plano alimentar atualizado com sucesso!');
+    } else {
+      await createPlanoAlimentar(planoData);
+      showToast('Plano alimentar salvo com sucesso!');
+    }
     if (nutricionista?.id) {
       await loadAllData(nutricionista.id);
     }
@@ -883,15 +920,32 @@ export default function Dashboard({ session }) {
                                   </span>
                                 </td>
                                 <td style={{ textAlign: 'right' }}>
-                                  <button
-                                    className="btn-table-action btn-view"
-                                    onClick={() => {
-                                      const p = pacientesList.find(item => item.id === c.paciente_id);
-                                      if (p) handleViewPatientDetails(p);
-                                    }}
-                                  >
-                                    <Eye size={14} /> Ficha
-                                  </button>
+                                  <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'flex-end' }}>
+                                    <button
+                                      className="btn-table-action btn-edit"
+                                      onClick={() => handleOpenEditConsulta(c)}
+                                      title="Editar Medidas e Consulta"
+                                    >
+                                      <Edit2 size={13} /> Editar
+                                    </button>
+                                    <button
+                                      className="btn-table-action btn-view"
+                                      onClick={() => {
+                                        const p = pacientesList.find(item => item.id === c.paciente_id);
+                                        if (p) handleViewPatientDetails(p);
+                                      }}
+                                      title="Ver Ficha / Prontuário do Paciente"
+                                    >
+                                      <Eye size={13} /> Ficha
+                                    </button>
+                                    <button
+                                      className="btn-icon-danger"
+                                      onClick={() => handleDeleteConsulta(c.id)}
+                                      title="Excluir Consulta"
+                                    >
+                                      <Trash2 size={14} />
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             ))}
@@ -907,35 +961,32 @@ export default function Dashboard({ session }) {
                   TAB 4: PLANOS ALIMENTARES
                  ======================================================== */}
               {activeTab === 'planos' && (
-                <div className="planos-tab">
-                  <div className="page-header-row">
-                    <div>
-                      <h2>Planos Alimentares Criados ({filteredPlanos.length})</h2>
-                      <p>Cardápios personalizados, metas calóricas e envio para pacientes</p>
+                <div className="tab-pane">
+                  {/* Top Bar Actions */}
+                  <div className="tab-actions-header">
+                    <div className="search-filter-group">
+                      <div className="search-input-wrapper">
+                        <Search size={16} className="search-icon" />
+                        <input
+                          type="text"
+                          placeholder="Buscar planos por nome do paciente..."
+                          value={planoSearch}
+                          onChange={(e) => setPlanoSearch(e.target.value)}
+                          className="form-control"
+                        />
+                      </div>
                     </div>
-                    <button className="btn-primary-action" onClick={() => handleOpenNewPlano()}>
-                      <Plus size={16} /> Montar Novo Plano
-                    </button>
-                  </div>
 
-                  {/* Search Bar */}
-                  <div className="filters-bar">
-                    <div className="search-input-wrapper">
-                      <Search size={18} className="search-icon" />
-                      <input
-                        type="text"
-                        placeholder="Buscar por título do plano ou nome do paciente..."
-                        value={planoSearch}
-                        onChange={(e) => setPlanoSearch(e.target.value)}
-                      />
-                    </div>
+                    <button className="btn-primary-action" onClick={() => handleOpenNewPlano()}>
+                      <Plus size={16} /> Novo Plano Alimentar
+                    </button>
                   </div>
 
                   {filteredPlanos.length === 0 ? (
                     <div className="empty-state-card">
                       <UtensilsCrossed size={48} className="empty-icon" />
                       <h3>Nenhum plano alimentar encontrado</h3>
-                      <p>Monte cardápios customizados com refeições, horários e substituições.</p>
+                      <p>Crie planos alimentares personalizados e envie diretamente pelo WhatsApp.</p>
                       <button className="btn-primary-action" onClick={() => handleOpenNewPlano()}>
                         <Plus size={16} /> Criar Primeiro Plano
                       </button>
@@ -979,8 +1030,9 @@ export default function Dashboard({ session }) {
                               <button
                                 className="btn-outline btn-sm"
                                 onClick={() => handleViewPlano(pl)}
+                                title="Editar e Visualizar Cardápio"
                               >
-                                <Eye size={14} /> Abrir Plano
+                                <Edit2 size={14} /> Editar / Ver Plano
                               </button>
                               <button
                                 className="btn-icon-danger"
@@ -1031,6 +1083,10 @@ export default function Dashboard({ session }) {
           setIsDetailsOpen(false);
           handleOpenNewConsulta(patientId);
         }}
+        onEditConsulta={(c) => {
+          setIsDetailsOpen(false);
+          handleOpenEditConsulta(c);
+        }}
         onNewPlanoForPatient={(patientId) => {
           setIsDetailsOpen(false);
           handleOpenNewPlano(patientId);
@@ -1043,15 +1099,22 @@ export default function Dashboard({ session }) {
 
       <ConsultationModal
         isOpen={isConsultaOpen}
-        onClose={() => setIsConsultaOpen(false)}
+        onClose={() => {
+          setIsConsultaOpen(false);
+          setConsultaToEdit(null);
+        }}
         onSave={handleSaveConsulta}
         pacientes={pacientesList}
         preSelectedPatientId={preSelectedPatientId}
+        consultaToEdit={consultaToEdit}
       />
 
       <MealPlanModal
         isOpen={isMealPlanOpen}
-        onClose={() => setIsMealPlanOpen(false)}
+        onClose={() => {
+          setIsMealPlanOpen(false);
+          setPlanToView(null);
+        }}
         onSave={handleSavePlano}
         pacientes={pacientesList}
         preSelectedPatientId={preSelectedPatientId}

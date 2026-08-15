@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from './Modal';
 
-export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, preSelectedPatientId }) {
+export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, preSelectedPatientId, consultaToEdit }) {
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -16,12 +16,45 @@ export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, 
   });
 
   useEffect(() => {
-    if (preSelectedPatientId) {
-      setFormData(prev => ({ ...prev, paciente_id: preSelectedPatientId }));
-    } else if (pacientes && pacientes.length > 0) {
-      setFormData(prev => ({ ...prev, paciente_id: prev.paciente_id || pacientes[0].id }));
+    if (consultaToEdit) {
+      setFormData({
+        paciente_id: consultaToEdit.paciente_id || '',
+        data_consulta: consultaToEdit.data_consulta ? consultaToEdit.data_consulta.slice(0, 10) : new Date().toISOString().slice(0, 10),
+        peso: consultaToEdit.peso || '',
+        cintura: consultaToEdit.cintura || '',
+        quadril: consultaToEdit.quadril || '',
+        percentual_gordura: consultaToEdit.percentual_gordura || '',
+        observacoes: consultaToEdit.observacoes || '',
+        proximo_retorno: consultaToEdit.proximo_retorno ? consultaToEdit.proximo_retorno.slice(0, 10) : ''
+      });
+    } else {
+      if (preSelectedPatientId) {
+        setFormData(prev => ({
+          ...prev,
+          paciente_id: preSelectedPatientId,
+          data_consulta: new Date().toISOString().slice(0, 10),
+          peso: '',
+          cintura: '',
+          quadril: '',
+          percentual_gordura: '',
+          observacoes: '',
+          proximo_retorno: ''
+        }));
+      } else if (pacientes && pacientes.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          paciente_id: prev.paciente_id || pacientes[0].id,
+          data_consulta: new Date().toISOString().slice(0, 10),
+          peso: '',
+          cintura: '',
+          quadril: '',
+          percentual_gordura: '',
+          observacoes: '',
+          proximo_retorno: ''
+        }));
+      }
     }
-  }, [preSelectedPatientId, pacientes, isOpen]);
+  }, [preSelectedPatientId, pacientes, consultaToEdit, isOpen]);
 
   const selectedPatient = pacientes?.find(p => p.id === formData.paciente_id);
 
@@ -69,8 +102,7 @@ export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, 
     setLoading(true);
     try {
       await onSave({
-        paciente_id: formData.paciente_id,
-        data_consulta: formData.data_consulta,
+        ...formData,
         peso: formData.peso ? parseFloat(formData.peso) : null,
         cintura: formData.cintura ? parseFloat(formData.cintura) : null,
         quadril: formData.quadril ? parseFloat(formData.quadril) : null,
@@ -80,7 +112,7 @@ export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, 
       });
       onClose();
     } catch (err) {
-      alert('Erro ao registrar consulta: ' + err.message);
+      alert('Erro ao salvar consulta: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -90,16 +122,17 @@ export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, 
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Registrar Nova Consulta & Avaliação"
-      subtitle="Insira as medidas antropométricas e notas clínicas da consulta"
+      title={consultaToEdit ? 'Editar Consulta & Medições' : 'Registrar Nova Consulta & Avaliação'}
+      subtitle={consultaToEdit ? 'Atualize as medidas e anotações clínicas desta consulta' : 'Insira as medidas antropométricas e notas clínicas da consulta'}
       maxWidth="680px"
     >
       <form onSubmit={handleSubmit} className="consultation-form">
         <div className="form-group full-width">
-          <label>Selecione o Paciente *</label>
+          <label>Paciente *</label>
           <select
             className="form-control"
             required
+            disabled={Boolean(consultaToEdit)}
             value={formData.paciente_id}
             onChange={(e) => handleChange('paciente_id', e.target.value)}
           >
@@ -222,7 +255,7 @@ export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, 
               Cancelar
             </button>
             <button type="submit" className="btn-primary-action" disabled={loading}>
-              {loading ? 'Salvando...' : 'Salvar Consulta'}
+              {loading ? 'Salvando...' : (consultaToEdit ? 'Atualizar Consulta' : 'Salvar Consulta')}
             </button>
           </div>
         </div>

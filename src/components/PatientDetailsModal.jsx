@@ -29,6 +29,7 @@ export default function PatientDetailsModal({
   patient, 
   onEditPatient, 
   onNewConsultaForPatient, 
+  onEditConsulta,
   onNewPlanoForPatient,
   onViewPlan 
 }) {
@@ -367,13 +368,22 @@ export default function PatientDetailsModal({
                             </strong>
                             {idx === 0 && <span className="badge-pill latest">Mais Recente</span>}
                           </div>
-                          <button 
-                            className="btn-icon-danger" 
-                            onClick={() => handleDeleteConsulta(c.id)}
-                            title="Excluir Consulta"
-                          >
-                            <Trash2 size={15} />
-                          </button>
+                          <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                            <button 
+                              className="btn-table-action btn-edit" 
+                              onClick={() => onEditConsulta && onEditConsulta(c)}
+                              title="Editar Consulta"
+                            >
+                              <Edit size={14} /> Editar
+                            </button>
+                            <button 
+                              className="btn-icon-danger" 
+                              onClick={() => handleDeleteConsulta(c.id)}
+                              title="Excluir Consulta"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
                         </div>
 
                         <div className="measurements-grid">

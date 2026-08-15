@@ -126,6 +126,7 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
     setLoading(true);
     try {
       await onSave({
+        id: planToView?.id,
         paciente_id: formData.paciente_id,
         conteudo: {
           titulo: formData.titulo,
