@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from './Modal';
-import { User, Heart, Sparkles, Check } from 'lucide-react';
+import { User, Heart, Sparkles, Check, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const OBJETIVOS_OPCOES = [
   'Emagrecimento',
@@ -151,20 +151,29 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
     const peso = parseFloat(formData.peso_inicial);
     let altura = parseFloat(formData.altura);
     if (!peso || !altura) return null;
-    if (altura > 3) altura = altura / 100; // converter cm para m se fornecido em cm
+    if (altura > 3) altura = altura / 100;
     const imc = peso / (altura * altura);
     let classif = 'Normal';
-    if (imc < 18.5) classif = 'Abaixo do peso';
-    else if (imc < 25) classif = 'Peso normal / Adequado';
-    else if (imc < 30) classif = 'Sobrepeso';
-    else if (imc < 35) classif = 'Obesidade Grau I';
-    else if (imc < 40) classif = 'Obesidade Grau II';
-    else classif = 'Obesidade Grau III';
+    let color = '#10b981';
+    if (imc < 18.5) { classif = 'Abaixo do peso'; color = '#eab308'; }
+    else if (imc < 25) { classif = 'Peso normal / Adequado'; color = '#10b981'; }
+    else if (imc < 30) { classif = 'Sobrepeso'; color = '#f97316'; }
+    else if (imc < 35) { classif = 'Obesidade Grau I'; color = '#ef4444'; }
+    else if (imc < 40) { classif = 'Obesidade Grau II'; color = '#dc2626'; }
+    else { classif = 'Obesidade Grau III'; color = '#991b1b'; }
 
-    return { value: imc.toFixed(2), classif };
+    return { value: imc.toFixed(2), classif, color };
   };
 
   const imcResult = calcIMC();
+
+  const getStepProgress = () => {
+    if (activeTab === 'dados') return { step: 1, pct: 33 };
+    if (activeTab === 'rotina') return { step: 2, pct: 66 };
+    return { step: 3, pct: 100 };
+  };
+
+  const currentProgress = getStepProgress();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -194,10 +203,25 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
       isOpen={isOpen}
       onClose={onClose}
       title={patientToEdit ? 'Editar Ficha do Paciente' : 'Cadastrar Novo Paciente'}
-      subtitle="Preencha os dados cadastrais e de anamnese nutricional"
-      maxWidth="780px"
+      subtitle="Ficha de Anamnese Clínica e Cadastro Nutricional"
+      maxWidth="800px"
     >
       <form onSubmit={handleSubmit} className="patient-form">
+        {/* Progress Bar Wizard */}
+        <div className="wizard-progress-container">
+          <div className="wizard-header">
+            <span className="wizard-step-label">Passo {currentProgress.step} de 3</span>
+            <span className="wizard-step-title">
+              {activeTab === 'dados' && '1. Identificação & Medidas Iniciais'}
+              {activeTab === 'rotina' && '2. Objetivos & Estilo de Vida'}
+              {activeTab === 'clinico' && '3. Histórico Clínico & Saúde'}
+            </span>
+          </div>
+          <div className="wizard-track">
+            <div className="wizard-bar" style={{ width: `${currentProgress.pct}%` }} />
+          </div>
+        </div>
+
         {/* Sub-navegação do formulário */}
         <div className="form-tabs">
           <button
@@ -205,7 +229,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
             className={`form-tab-btn ${activeTab === 'dados' ? 'active' : ''}`}
             onClick={() => setActiveTab('dados')}
           >
-            <User size={16} /> 1. Dados Pessoais & Medidas
+            <User size={16} /> 1. Dados Pessoais
           </button>
           <button
             type="button"
@@ -228,7 +252,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
           <div className="form-tab-content">
             <div className="form-grid-2">
               <div className="form-group full-width">
-                <label>Nome Completo *</label>
+                <label>Nome Completo do Paciente *</label>
                 <input
                   type="text"
                   required
@@ -286,7 +310,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
             </div>
 
             <div className="section-divider">
-              <span>Medidas Iniciais</span>
+              <span>Medidas Antropométricas Iniciais</span>
             </div>
 
             <div className="form-grid-2">
@@ -317,8 +341,12 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
 
             {imcResult && (
               <div className="imc-calc-box">
-                <div className="imc-badge">IMC Inicial: {imcResult.value} kg/m²</div>
-                <div className="imc-classification">Classificação: <strong>{imcResult.classif}</strong></div>
+                <div className="imc-badge">
+                  <span>IMC Inicial:</span> <strong>{imcResult.value} kg/m²</strong>
+                </div>
+                <div className="imc-classification" style={{ color: imcResult.color }}>
+                  Classificação OMS: <strong>{imcResult.classif}</strong>
+                </div>
               </div>
             )}
           </div>
@@ -328,7 +356,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
         {activeTab === 'rotina' && (
           <div className="form-tab-content">
             <div className="form-group">
-              <label>Objetivos Principais (Selecione os que se aplicam)</label>
+              <label>Objetivos Principais (Selecione os aplicáveis)</label>
               <div className="tags-selector">
                 {OBJETIVOS_OPCOES.map((obj) => {
                   const selected = formData.objetivos.includes(obj);
@@ -348,7 +376,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
             </div>
 
             <div className="form-group">
-              <label>Detalhamento do Objetivo do Paciente</label>
+              <label>Detalhamento do Objetivo & Queixa Principal</label>
               <textarea
                 rows="2"
                 placeholder="Ex: Deseja perder 5kg para casamento em 3 meses e melhorar disposição matinal..."
@@ -375,7 +403,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
               </div>
 
               <div className="form-group">
-                <label>Refeições por dia habituais</label>
+                <label>Refeições habituais por dia</label>
                 <input
                   type="number"
                   min="1"
@@ -449,7 +477,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
         {activeTab === 'clinico' && (
           <div className="form-tab-content">
             <div className="form-group">
-              <label>Patologias / Condições Diagnosticadas</label>
+              <label>Patologias Diagnosticadas</label>
               <div className="tags-selector">
                 {PATOLOGIAS_OPCOES.map((pat) => {
                   const selected = formData.patologias.includes(pat);
@@ -469,7 +497,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
             </div>
 
             <div className="form-group">
-              <label>Restrições e Preferências Alimentares</label>
+              <label>Restrições / Preferências Alimentares</label>
               <div className="tags-selector">
                 {RESTRICOES_OPCOES.map((rest) => {
                   const selected = formData.restricoes_alimentares.includes(rest);
@@ -510,7 +538,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
 
             <div className="form-grid-2">
               <div className="form-group">
-                <label>Medicamentos Contínuos</label>
+                <label>Medicamentos de Uso Contínuo</label>
                 <input
                   type="text"
                   placeholder="Ex: Losartana 50mg pela manhã"
@@ -533,7 +561,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
             </div>
 
             <div className="form-group">
-              <label>Observações Clínicas Adicionais / Anamnese Livre</label>
+              <label>Observações Clínicas / Histórico Familiar</label>
               <textarea
                 rows="3"
                 placeholder="Anotações adicionais da rotina, histórico familiar, sintomas gastrointestinais..."
@@ -553,16 +581,16 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
                 className="btn-outline"
                 onClick={() => setActiveTab(activeTab === 'clinico' ? 'rotina' : 'dados')}
               >
-                Voltar
+                <ArrowLeft size={16} /> Etapa Anterior
               </button>
             )}
             {activeTab !== 'clinico' && (
               <button
                 type="button"
-                className="btn-outline"
+                className="btn-primary-action"
                 onClick={() => setActiveTab(activeTab === 'dados' ? 'rotina' : 'clinico')}
               >
-                Próxima Etapa
+                Próxima Etapa <ArrowRight size={16} />
               </button>
             )}
           </div>
@@ -571,7 +599,7 @@ export default function PatientFormModal({ isOpen, onClose, onSave, patientToEdi
               Cancelar
             </button>
             <button type="submit" className="btn-primary-action" disabled={loading}>
-              {loading ? 'Salvando...' : (patientToEdit ? 'Atualizar Paciente' : 'Salvar Paciente')}
+              {loading ? 'Salvando...' : (patientToEdit ? 'Atualizar Paciente' : 'Finalizar Cadastro')}
             </button>
           </div>
         </div>

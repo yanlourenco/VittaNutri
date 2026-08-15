@@ -147,9 +147,20 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
       isOpen={isOpen}
       onClose={onClose}
       title={planToView ? 'Visualizar / Editar Plano Alimentar' : 'Montador de Plano Alimentar'}
-      subtitle="Estruture as refeições personalizadas com horário, opções e substituições"
-      maxWidth="850px"
+      subtitle="Estruture refeições com horários, porções e substituições"
+      maxWidth="880px"
     >
+      {/* Printable Letterhead */}
+      <div className="print-letterhead">
+        <div className="print-brand">
+          <h3>VITTA NUTRI — PRESCRIÇÃO DIETÉTICA</h3>
+          <p>Prescrição Nutricional Individualizada</p>
+        </div>
+        <div className="print-date">
+          <strong>Paciente:</strong> {selectedPatient?.nome || 'Paciente'} | Data: {new Date().toLocaleDateString('pt-BR')}
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit} className="meal-plan-form">
         <div className="plan-actions-toolbar">
           <div className="toolbar-patient-select">
@@ -161,7 +172,7 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
               value={formData.paciente_id}
               onChange={(e) => setFormData(prev => ({ ...prev, paciente_id: e.target.value }))}
             >
-              <option value="">-- Selecione o paciente --</option>
+              <option value="">Selecione o paciente</option>
               {pacientes?.map(p => (
                 <option key={p.id} value={p.id}>
                   {p.nome}
@@ -181,14 +192,14 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
             </button>
             <button type="button" className="btn-toolbar" onClick={handlePrint} title="Imprimir / Salvar PDF">
               <Printer size={16} />
-              <span>Imprimir</span>
+              <span>Imprimir / PDF</span>
             </button>
           </div>
         </div>
 
-        <div className="form-grid-2" style={{ marginTop: '1rem' }}>
+        <div className="form-grid-2" style={{ marginTop: '1.25rem' }}>
           <div className="form-group">
-            <label>Título do Plano Alimentar *</label>
+            <label>Título / Identificação do Plano *</label>
             <input
               type="text"
               required
@@ -212,7 +223,7 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
         </div>
 
         <div className="section-divider">
-          <span>Estrutura das Refeições Diárias</span>
+          <span>Estrutura do Cardápio Diário</span>
         </div>
 
         <div className="meals-builder-list">
@@ -261,11 +272,11 @@ export default function MealPlanModal({ isOpen, onClose, onSave, pacientes, preS
                 </div>
 
                 <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label>Dica / Observação da Refeição</label>
+                  <label>Dica / Orientação Especial para esta Refeição</label>
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Ex: Pode substituir o frango por patinho moído na mesma quantidade"
+                    placeholder="Ex: Pode substituir o frango por peixe grelhado ou patinho moído"
                     value={ref.recomendacoes}
                     onChange={(e) => handleRefeicaoChange(ref.id, 'recomendacoes', e.target.value)}
                   />

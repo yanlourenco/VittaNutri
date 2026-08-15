@@ -103,7 +103,7 @@ export default function ConsultationModal({ isOpen, onClose, onSave, pacientes, 
             value={formData.paciente_id}
             onChange={(e) => handleChange('paciente_id', e.target.value)}
           >
-            <option value="">-- Selecione o paciente --</option>
+            <option value="">Selecione o paciente</option>
             {pacientes?.map(p => (
               <option key={p.id} value={p.id}>
                 {p.nome} {p.email ? `(${p.email})` : ''}
