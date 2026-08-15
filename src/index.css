@@ -1444,6 +1444,61 @@ textarea.form-control {
 .tag-info { background: #e0f2fe; color: #0284c7; }
 .tag-danger { background: #fff1f2; color: #9f1239; }
 
+.tag-chip.active-neutral {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+  color: #334155;
+  font-weight: 600;
+}
+
+.add-tag-inline-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  max-width: 380px;
+}
+
+.age-pill-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
+.input-suffix-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-suffix-wrapper input {
+  padding-right: 3.5rem;
+}
+
+.input-suffix {
+  position: absolute;
+  right: 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  pointer-events: none;
+  text-transform: lowercase;
+}
+
+.table-row-clickable {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.table-row-clickable:hover td {
+  background-color: #f0f9ff !important;
+}
+
 .custom-checkbox-label {
   display: flex;
   align-items: center;

@@ -172,8 +172,13 @@ export default function Dashboard({ session }) {
         setSelectedPatientForDetails(prev => ({ ...prev, ...patientData }));
       }
     } else {
-      await createPaciente(nutricionista.id, patientData);
+      const created = await createPaciente(nutricionista.id, patientData);
       showToast('Paciente cadastrado com sucesso!');
+      // Redireciona imediatamente para o perfil do paciente recém cadastrado (Prompt 4)
+      if (created) {
+        setSelectedPatientForDetails(created);
+        setIsDetailsOpen(true);
+      }
     }
     await loadAllData(nutricionista.id);
   };
@@ -662,10 +667,18 @@ export default function Dashboard({ session }) {
                   {filteredPacientes.length === 0 ? (
                     <div className="empty-state-card">
                       <Users size={48} className="empty-icon" />
-                      <h3>Nenhum paciente encontrado</h3>
-                      <p>Cadastre seus pacientes para acompanhar prontuários, consultas e dietas.</p>
+                      <h3>
+                        {pacientesList.length === 0 
+                          ? 'Nenhum paciente cadastrado ainda' 
+                          : 'Nenhum paciente encontrado com esses filtros'}
+                      </h3>
+                      <p>
+                        {pacientesList.length === 0 
+                          ? 'Cadastre seus pacientes para acompanhar prontuários, consultas e dietas.' 
+                          : 'Tente alterar os termos da busca ou os filtros selecionados.'}
+                      </p>
                       <button className="btn-primary-action" onClick={handleOpenNewPatient}>
-                        <Plus size={16} /> Cadastrar Primeiro Paciente
+                        <Plus size={16} /> Cadastrar Novo Paciente
                       </button>
                     </div>
                   ) : (
@@ -674,21 +687,25 @@ export default function Dashboard({ session }) {
                         <thead>
                           <tr>
                             <th>Paciente</th>
+                            <th>Objetivo</th>
+                            <th>Última Consulta</th>
                             <th>Contato</th>
-                            <th>Objetivo Principal</th>
-                            <th>Peso Inicial</th>
-                            <th>Consultas</th>
                             <th>Status / Retorno</th>
                             <th style={{ textAlign: 'right' }}>Ações</th>
                           </tr>
                         </thead>
                         <tbody>
                           {filteredPacientes.map((p) => {
-                            const objPrincipal = Array.isArray(p.objetivos) && p.objetivos.length > 0 ? p.objetivos[0] : 'Geral';
+                            const objPrincipal = Array.isArray(p.objetivos) && p.objetivos.length > 0 ? p.objetivos[0] : 'Saúde geral';
                             const isSemRetorno = (dashboardStats?.pacientesSemRetorno || []).some(sr => sr.id === p.id);
 
                             return (
-                              <tr key={p.id}>
+                              <tr 
+                                key={p.id} 
+                                className="table-row-clickable"
+                                onClick={() => handleViewPatientDetails(p)}
+                                title="Clique para abrir o perfil/prontuário do paciente"
+                              >
                                 <td>
                                   <div className="table-patient-cell">
                                     <div className="table-avatar">
@@ -701,6 +718,18 @@ export default function Dashboard({ session }) {
                                   </div>
                                 </td>
                                 <td>
+                                  <span className="tag-pill tag-primary">{objPrincipal}</span>
+                                </td>
+                                <td>
+                                  {p.ultima_consulta ? (
+                                    <strong style={{ fontSize: '0.85rem' }}>
+                                      {new Date(p.ultima_consulta).toLocaleDateString('pt-BR')}
+                                    </strong>
+                                  ) : (
+                                    <span className="text-muted" style={{ fontSize: '0.8rem' }}>Sem consultas</span>
+                                  )}
+                                </td>
+                                <td onClick={(e) => e.stopPropagation()}>
                                   <div className="table-contact-cell">
                                     {p.whatsapp && (
                                       <span className="contact-link"><Phone size={13} /> {p.whatsapp}</span>
@@ -709,15 +738,6 @@ export default function Dashboard({ session }) {
                                       <span className="contact-link"><Mail size={13} /> {p.email}</span>
                                     )}
                                   </div>
-                                </td>
-                                <td>
-                                  <span className="tag-pill tag-primary">{objPrincipal}</span>
-                                </td>
-                                <td>
-                                  <strong>{p.peso_inicial ? `${p.peso_inicial} kg` : '--'}</strong>
-                                </td>
-                                <td>
-                                  <span className="badge-count">{p.total_consultas || 0} avaliações</span>
                                 </td>
                                 <td>
                                   {isSemRetorno ? (
@@ -732,7 +752,7 @@ export default function Dashboard({ session }) {
                                     <span className="text-muted">Não agendado</span>
                                   )}
                                 </td>
-                                <td style={{ textAlign: 'right' }}>
+                                <td style={{ textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
                                   <div className="table-actions-row">
                                     <button
                                       className="btn-table-action btn-view"
