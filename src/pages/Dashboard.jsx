@@ -127,6 +127,26 @@ export default function Dashboard({ session }) {
     init();
   }, [session]);
 
+  // Sincronização em tempo real (Auto-refresh a cada 20 segundos e ao voltar para a aba)
+  useEffect(() => {
+    if (!nutricionista?.id) return;
+
+    const interval = setInterval(() => {
+      loadAllData(nutricionista.id);
+    }, 20000);
+
+    const handleWindowFocus = () => {
+      loadAllData(nutricionista.id);
+    };
+
+    window.addEventListener('focus', handleWindowFocus);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', handleWindowFocus);
+    };
+  }, [nutricionista]);
+
   const loadAllData = async (nutriId) => {
     if (!nutriId) return;
     try {

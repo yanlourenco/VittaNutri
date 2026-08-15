@@ -1,6 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 
-const connectionString = import.meta.env.VITE_DATABASE_URL;
+const DEFAULT_DB_URL = 'postgresql://neondb_owner:npg_JiILodXxSg48@ep-wild-flower-acin8qgg-pooler.sa-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require';
+const connectionString = import.meta.env.VITE_DATABASE_URL || DEFAULT_DB_URL;
 
 let sql = null;
 if (connectionString) {
