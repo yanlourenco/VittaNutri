@@ -53,10 +53,10 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}>
-            <VittaLogo size={32} color="var(--primary)" />
-            Vitta Nutri
-          </h1>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem' }}>
+            <VittaLogo size={48} color="#0b132b" leafColor="#0284c7" />
+          </div>
+          <h1>Vitta Nutri</h1>
           <p>Crie sua conta de nutricionista</p>
         </div>
 

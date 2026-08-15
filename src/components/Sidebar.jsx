@@ -21,7 +21,7 @@ export default function Sidebar({ activeTab, setActiveTab, session, onLogout }) 
     <aside className="app-sidebar">
       <div className="sidebar-brand">
         <div className="brand-icon">
-          <VittaLogo size={24} color="#38bdf8" />
+          <VittaLogo size={32} color="#ffffff" leafColor="#38bdf8" />
         </div>
         <div className="brand-text">
           <h2>Vitta Nutri</h2>
