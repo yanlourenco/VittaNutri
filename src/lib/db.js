@@ -483,7 +483,10 @@ export async function deletePlanoAlimentar(id) {
 }
 
 /**
- * DASHBOARD STATS & MÉTRICAS
+ * DASHBOARD STATS & MÉTRICAS (PROMPT 3 COMPLIANCE)
+ * - Card 1: Total de pacientes ativos (da nutricionista)
+ * - Card 2: Consultas da semana atual
+ * - Card 3: Pacientes sem retorno (última consulta > 30 dias sem próximo retorno agendado)
  */
 export async function getDashboardData(nutricionistaId) {
   if (!nutricionistaId) return null;
@@ -491,19 +494,48 @@ export async function getDashboardData(nutricionistaId) {
   try {
     const pacientes = await getPacientes(nutricionistaId);
     let totalConsultas = 0;
+    let consultasSemana = 0;
     let consultasRecentes = [];
     let proximosRetornos = [];
+    let pacientesSemRetorno = [];
     let planosCount = 0;
 
     if (sql) {
       try {
+        // Estatísticas agregadas
         const stats = await sql`
           SELECT 
             (SELECT COUNT(*)::int FROM public.consultas c INNER JOIN public.pacientes p ON c.paciente_id = p.id WHERE p.nutricionista_id = ${nutricionistaId}) as total_consultas,
+            (SELECT COUNT(*)::int FROM public.consultas c INNER JOIN public.pacientes p ON c.paciente_id = p.id WHERE p.nutricionista_id = ${nutricionistaId} AND c.data_consulta >= date_trunc('week', CURRENT_DATE)::date AND c.data_consulta <= (date_trunc('week', CURRENT_DATE) + interval '6 days')::date) as consultas_semana,
             (SELECT COUNT(*)::int FROM public.planos_alimentares pl INNER JOIN public.pacientes p ON pl.paciente_id = p.id WHERE p.nutricionista_id = ${nutricionistaId}) as total_planos
         `;
         totalConsultas = stats[0]?.total_consultas || 0;
+        consultasSemana = stats[0]?.consultas_semana || 0;
         planosCount = stats[0]?.total_planos || 0;
+
+        // Pacientes sem retorno: última consulta há mais de 30 dias E sem próximo retorno agendado (ou retorno já vencido)
+        pacientesSemRetorno = await sql`
+          SELECT 
+            p.id, 
+            p.nome, 
+            p.email, 
+            p.whatsapp,
+            p.sexo,
+            p.nivel_atividade,
+            p.peso_inicial,
+            MAX(c.data_consulta) as ultima_consulta,
+            MAX(c.proximo_retorno) as proximo_retorno
+          FROM public.pacientes p
+          LEFT JOIN public.consultas c ON c.paciente_id = p.id
+          WHERE p.nutricionista_id = ${nutricionistaId}
+          GROUP BY p.id, p.nome, p.email, p.whatsapp, p.sexo, p.nivel_atividade, p.peso_inicial, p.created_at
+          HAVING (
+            (MAX(c.data_consulta) IS NOT NULL AND MAX(c.data_consulta) < (CURRENT_DATE - interval '30 days')::date)
+            OR (MAX(c.data_consulta) IS NULL AND p.created_at < (CURRENT_DATE - interval '30 days'))
+          )
+          AND (MAX(c.proximo_retorno) IS NULL OR MAX(c.proximo_retorno) < CURRENT_DATE)
+          ORDER BY COALESCE(MAX(c.data_consulta), p.created_at::date) ASC
+        `;
 
         consultasRecentes = await sql`
           SELECT c.*, p.nome as paciente_nome, p.whatsapp as paciente_whatsapp
@@ -528,13 +560,44 @@ export async function getDashboardData(nutricionistaId) {
       }
     }
 
-    if (consultasRecentes.length === 0) {
+    // Fallback local caso offline ou sem registros via DB
+    if (pacientesSemRetorno.length === 0 && consultasRecentes.length === 0) {
       const pIds = new Set(pacientes.map(p => p.id));
       const allConsultas = getLS(LS_KEYS.CONSULTAS).filter(c => pIds.has(c.paciente_id));
       const allPlanos = getLS(LS_KEYS.PLANOS).filter(pl => pIds.has(pl.paciente_id));
       
       totalConsultas = allConsultas.length;
       planosCount = allPlanos.length;
+
+      // Calcular início e fim da semana atual
+      const now = new Date();
+      const currentDay = now.getDay();
+      const diffToMonday = now.getDate() - currentDay + (currentDay === 0 ? -6 : 1);
+      const monday = new Date(now.setDate(diffToMonday));
+      monday.setHours(0, 0, 0, 0);
+
+      consultasSemana = allConsultas.filter(c => {
+        const cDate = new Date(c.data_consulta);
+        return cDate >= monday;
+      }).length;
+
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      pacientesSemRetorno = pacientes.filter(p => {
+        const pConsultas = allConsultas.filter(c => c.paciente_id === p.id);
+        const sorted = [...pConsultas].sort((a, b) => new Date(b.data_consulta) - new Date(a.data_consulta));
+        const lastConsulta = sorted[0];
+        const upcoming = pConsultas.find(c => c.proximo_retorno && new Date(c.proximo_retorno) >= new Date());
+
+        if (upcoming) return false;
+
+        if (lastConsulta) {
+          return new Date(lastConsulta.data_consulta) < thirtyDaysAgo;
+        } else {
+          return p.created_at && new Date(p.created_at) < thirtyDaysAgo;
+        }
+      });
 
       const pMap = Object.fromEntries(pacientes.map(p => [p.id, p]));
       consultasRecentes = allConsultas
@@ -562,8 +625,10 @@ export async function getDashboardData(nutricionistaId) {
     return {
       totalPacientes: pacientes.length,
       totalConsultas,
+      consultasSemana,
       totalPlanos: planosCount,
       totalProximosRetornos: proximosRetornos.length,
+      pacientesSemRetorno: pacientesSemRetorno || [],
       proximosRetornos,
       consultasRecentes,
       objetivosCount,

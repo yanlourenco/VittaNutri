@@ -567,6 +567,49 @@ textarea.form-control {
   text-decoration: underline;
 }
 
+.stats-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Sem Retorno List (Prompt 3) */
+.sem-retorno-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sem-retorno-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  background-color: #fffaf5;
+  border: 1px solid #fed7aa;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.sem-retorno-item.clickable {
+  cursor: pointer;
+}
+
+.sem-retorno-item.clickable:hover {
+  background-color: #fff7ed;
+  border-color: #fb923c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.12);
+}
+
+.clickable-patient-name {
+  color: var(--text-main);
+  transition: color 0.15s ease;
+}
+
+.sem-retorno-item.clickable:hover .clickable-patient-name {
+  color: #ea580c;
+  text-decoration: underline;
+}
+
 /* Retornos List */
 .retornos-list {
   display: flex;

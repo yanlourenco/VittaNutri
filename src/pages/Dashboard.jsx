@@ -26,7 +26,8 @@ import CalculatorsTab from '../components/CalculatorsTab';
 
 import {
   Users,
-  Stethoscope,
+  CalendarCheck,
+  UserX,
   UtensilsCrossed,
   Calendar,
   Search,
@@ -40,7 +41,9 @@ import {
   Scale,
   Clock,
   RefreshCw,
-  Share2
+  Share2,
+  CheckCircle2,
+  Stethoscope
 } from 'lucide-react';
 
 export default function Dashboard({ session }) {
@@ -278,54 +281,122 @@ export default function Dashboard({ session }) {
 
         <main className="main-content-scroll">
           {/* ========================================================
-              TAB 1: VISÃO GERAL (OVERVIEW)
+              TAB 1: VISÃO GERAL (OVERVIEW - PROMPT 3 COMPLIANCE)
              ======================================================== */}
           {activeTab === 'overview' && (
             <div className="overview-tab">
-              {/* Top Banner with summary metrics */}
-              <div className="stats-grid">
+              {/* Top 3 Cards Principais do Prompt 3 */}
+              <div className="stats-grid stats-grid-3">
+                {/* Card 1: Total de pacientes ativos */}
                 <StatsCard
-                  title="Total de Pacientes"
+                  title="Total de Pacientes Ativos"
                   value={dashboardStats?.totalPacientes || 0}
-                  subtitle="Cadastrados no sistema"
+                  subtitle="Cadastrados no seu sistema"
                   icon={Users}
-                  color="blue"
+                  color="green"
                   onClick={() => setActiveTab('pacientes')}
                 />
+
+                {/* Card 2: Consultas da semana */}
                 <StatsCard
-                  title="Consultas Realizadas"
-                  value={dashboardStats?.totalConsultas || 0}
-                  subtitle="Avaliações antropométricas"
-                  icon={Stethoscope}
-                  color="green"
+                  title="Consultas da Semana"
+                  value={dashboardStats?.consultasSemana || 0}
+                  subtitle="Agendadas/realizadas esta semana"
+                  icon={CalendarCheck}
+                  color="blue"
                   onClick={() => setActiveTab('consultas')}
                 />
+
+                {/* Card 3: Pacientes sem retorno */}
                 <StatsCard
-                  title="Próximos Retornos"
-                  value={dashboardStats?.totalProximosRetornos || 0}
-                  subtitle="Consultas agendadas"
-                  icon={Calendar}
+                  title="Pacientes sem Retorno"
+                  value={dashboardStats?.pacientesSemRetorno?.length || 0}
+                  subtitle="Sem consulta há mais de 30 dias"
+                  icon={UserX}
                   color="orange"
-                  onClick={() => setActiveTab('consultas')}
-                />
-                <StatsCard
-                  title="Planos Criados"
-                  value={dashboardStats?.totalPlanos || 0}
-                  subtitle="Cardápios individualizados"
-                  icon={UtensilsCrossed}
-                  color="purple"
-                  onClick={() => setActiveTab('planos')}
                 />
               </div>
 
-              {/* Two Column Layout: Retornos & Recent Consultations */}
+              {/* Seção Principal: Card 3 Detalhado (Pacientes sem Retorno) e Agenda de Retornos */}
               <div className="overview-grid-2">
-                {/* Card 1: Próximos Retornos */}
+                {/* Card 3 Lista: Pacientes sem retorno (> 30 dias) */}
+                <div className="dashboard-section-card">
+                  <div className="section-card-header">
+                    <div>
+                      <h3>⚠️ Pacientes sem Retorno (&gt; 30 dias)</h3>
+                      <p>Pacientes cuja última consulta foi há mais de 30 dias e sem retorno agendado</p>
+                    </div>
+                    {dashboardStats?.pacientesSemRetorno?.length > 0 && (
+                      <span className="badge-pill latest" style={{ background: '#fffbeb', color: '#b45309' }}>
+                        {dashboardStats.pacientesSemRetorno.length} pacientes
+                      </span>
+                    )}
+                  </div>
+
+                  {(!dashboardStats?.pacientesSemRetorno || dashboardStats.pacientesSemRetorno.length === 0) ? (
+                    <div className="empty-state-mini">
+                      <CheckCircle2 size={36} color="#10b981" />
+                      <p style={{ fontWeight: 600, color: 'var(--text-main)' }}>
+                        Nenhum paciente sem retorno no momento
+                      </p>
+                      <span className="text-muted" style={{ fontSize: '0.8rem' }}>
+                        Todos os seus pacientes estão em acompanhamento regular.
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="sem-retorno-list">
+                      {dashboardStats.pacientesSemRetorno.map((p) => {
+                        const fullPatient = pacientesList.find(item => item.id === p.id) || p;
+                        return (
+                          <div
+                            key={p.id}
+                            className="sem-retorno-item clickable"
+                            onClick={() => handleViewPatientDetails(fullPatient)}
+                            title="Clique para abrir o prontuário do paciente"
+                          >
+                            <div className="retorno-avatar" style={{ backgroundColor: '#fff7ed', color: '#ea580c' }}>
+                              {p.nome?.charAt(0).toUpperCase() || 'P'}
+                            </div>
+                            <div className="retorno-info">
+                              <strong className="clickable-patient-name">{p.nome}</strong>
+                              <span>
+                                {p.ultima_consulta 
+                                  ? `Última consulta: ${new Date(p.ultima_consulta).toLocaleDateString('pt-BR')}`
+                                  : 'Nenhuma consulta registrada ainda'}
+                              </span>
+                            </div>
+                            <div className="retorno-actions" onClick={(e) => e.stopPropagation()}>
+                              {p.whatsapp && (
+                                <a
+                                  href={`https://api.whatsapp.com/send?phone=55${p.whatsapp.replace(/\D/g, '')}&text=Ol%C3%A1%20${encodeURIComponent(p.nome)},%20tudo%20bem?%20Faz%20mais%20de%2030%20dias%20desde%20nossa%20%C3%BAltima%20consulta.%20Vamos%20agendar%20seu%20retorno%20nutricional?`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="btn-icon-whatsapp"
+                                  title="Enviar mensagem WhatsApp para agendar retorno"
+                                >
+                                  <Share2 size={14} />
+                                </a>
+                              )}
+                              <button
+                                className="btn-outline btn-sm"
+                                onClick={() => handleOpenNewConsulta(p.id)}
+                              >
+                                Agendar Consulta
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Agenda de Próximos Retornos */}
                 <div className="dashboard-section-card">
                   <div className="section-card-header">
                     <div>
                       <h3>📅 Próximos Retornos Agendados</h3>
-                      <p>Pacientes com retorno previsto para os próximos dias</p>
+                      <p>Consultas marcadas para os próximos dias</p>
                     </div>
                     <button className="btn-link" onClick={() => setActiveTab('consultas')}>
                       Ver todos <ArrowRight size={14} />
@@ -349,7 +420,7 @@ export default function Dashboard({ session }) {
                           </div>
                           <div className="retorno-info">
                             <strong>{ret.paciente_nome}</strong>
-                            <span>Retorno em: {new Date(ret.proximo_retorno).toLocaleDateString('pt-BR')}</span>
+                            <span>Retorno: {new Date(ret.proximo_retorno).toLocaleDateString('pt-BR')}</span>
                           </div>
                           <div className="retorno-actions">
                             {ret.paciente_whatsapp && (
@@ -375,8 +446,10 @@ export default function Dashboard({ session }) {
                     </div>
                   )}
                 </div>
+              </div>
 
-                {/* Card 2: Consultas Recentes */}
+              {/* Atendimentos Recentes & Ações Rápidas */}
+              <div className="overview-grid-2" style={{ marginTop: '1.5rem' }}>
                 <div className="dashboard-section-card">
                   <div className="section-card-header">
                     <div>
@@ -427,40 +500,6 @@ export default function Dashboard({ session }) {
                     </div>
                   )}
                 </div>
-              </div>
-
-              {/* Objetivos dos Pacientes & Atalhos Rápidos */}
-              <div className="overview-grid-2" style={{ marginTop: '1.5rem' }}>
-                <div className="dashboard-section-card">
-                  <div className="section-card-header">
-                    <div>
-                      <h3>🎯 Distribuição de Objetivos</h3>
-                      <p>Metas mais comuns entre seus pacientes</p>
-                    </div>
-                  </div>
-
-                  {dashboardStats?.objetivosCount && Object.keys(dashboardStats.objetivosCount).length > 0 ? (
-                    <div className="objetivos-progress-list">
-                      {Object.entries(dashboardStats.objetivosCount).map(([obj, count]) => {
-                        const total = dashboardStats.totalPacientes || 1;
-                        const pct = Math.round((count / total) * 100);
-                        return (
-                          <div key={obj} className="progress-item">
-                            <div className="progress-label-row">
-                              <span className="progress-title">{obj}</span>
-                              <span className="progress-count">{count} ({pct}%)</span>
-                            </div>
-                            <div className="progress-bar-bg">
-                              <div className="progress-bar-fill" style={{ width: `${pct}%` }} />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <p className="text-muted" style={{ padding: '1rem 0' }}>Cadastre pacientes com objetivos para visualizar o gráfico de metas.</p>
-                  )}
-                </div>
 
                 <div className="dashboard-section-card quick-actions-panel">
                   <div className="section-card-header">
@@ -472,7 +511,7 @@ export default function Dashboard({ session }) {
 
                   <div className="quick-buttons-grid">
                     <button className="quick-btn" onClick={handleOpenNewPatient}>
-                      <div className="quick-btn-icon" style={{ backgroundColor: '#eff6ff', color: 'var(--primary)' }}>
+                      <div className="quick-btn-icon" style={{ backgroundColor: '#ecfdf5', color: '#10b981' }}>
                         <Users size={20} />
                       </div>
                       <div className="quick-btn-text">
@@ -482,7 +521,7 @@ export default function Dashboard({ session }) {
                     </button>
 
                     <button className="quick-btn" onClick={() => handleOpenNewConsulta()}>
-                      <div className="quick-btn-icon" style={{ backgroundColor: '#ecfdf5', color: '#10b981' }}>
+                      <div className="quick-btn-icon" style={{ backgroundColor: '#eff6ff', color: '#2563eb' }}>
                         <Stethoscope size={20} />
                       </div>
                       <div className="quick-btn-text">
